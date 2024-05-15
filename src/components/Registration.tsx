@@ -2,6 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Slice from "./assets/Slice.png";
 import building from "./assets/building.jpg";
+import Select from 'react-select';
+
+
 type Props = {};
 const branchOptions = [
   "AKLA",
@@ -167,6 +170,8 @@ const branchOptions = [
   "YATI",
   "ZAML",
 ];
+
+
 const fieldStyle = "flex flex-row gap-4";
 const headerStyle = "lg:text-lg text-base mb-2";
 const inputStyle =
@@ -250,14 +255,11 @@ const Registration = (props: Props) => {
             <div className="w-1/2 mb-4">
               <h1 className={`${headerStyle}`}>Branch Code</h1>
               <div className="relative">
-                <select className="w-full lg:max-w-[417px] lg:h-[56px] p-2 bg-gray-300 rounded-lg overflow-y-auto">
-                  <option value="">Select branch</option>
-                  {branchOptions.map((option, index) => (
-                    <option key={index} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
+              <Select
+                options={branchOptions.map(option => ({ value: option, label: option }))}
+                placeholder="Select branch"
+                className="w-full lg:max-w-[417px] lg:h-[56px] md:h-10  p-2 bg-gray-300 rounded-lg"
+              />
               </div>
             </div>
           </div>

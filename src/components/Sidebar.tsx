@@ -6,12 +6,21 @@ import {
   BeakerIcon,
   ArrowLeftStartOnRectangleIcon,
   ArrowLeftCircleIcon,
+  ChevronDownIcon
 } from "@heroicons/react/24/solid";
-
+import { Link } from "react-router-dom";
+import Nav from './Nav';
+type Submenu = {
+  title:string;
+  path:string;
+  icon:React.ElementType;
+}
 type NavItem = {
-  id: number;
-  name: string;
+  title: string;
+  submenu:boolean;
   icon: React.ElementType;
+  path: string;
+  submenuItems?:Submenu[];
 };
 
 interface SidebarProps {
@@ -21,23 +30,26 @@ interface SidebarProps {
 type Props = {};
 
 const listStyle =
-  "group flex ml-2 items-center text-[18px] text-gray-400 font-medium py-2 px-2 gap-2  overflow-hidden cursor-pointer  rounded-lg";
+  "group flex ml-2 items-center text-[18px] text-gray-400 font-medium py-2 pr-10 px-2 gap-2  overflow-hidden cursor-pointer  rounded-lg";
 const pStyle = "group-hover:text-primary  font text-[20px]";
 const iconStyle = "size-[32px] group-hover:text-primary ";
 
 const navItems: NavItem[] = [
-  { id: 1, name: "Dashboard", icon: ChartBarIcon },
-  { id: 2, name: "Request", icon: EnvelopeIcon },
-  { id: 3, name: "Setup", icon: BeakerIcon },
+  { title: "Dashboard", icon: ChartBarIcon, path: "/dashboard", submenu: false},
+  { title: "Request", icon: EnvelopeIcon, path: "/request",  submenu: true, 
+  submenuItems: [{
+    title: "All Requests", icon: EnvelopeIcon, path: "/request/all"
+  }]},
+  { title: "Setup", icon: BeakerIcon, path: "/setup", submenu: false},
 ];
 
 const Sidebar: React.FC<SidebarProps> = ({ darkMode }) => {
   const [open, setOpen] = useState(window.innerWidth > 1024);
-
+  const [submenuOpen, setSubMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
-      setOpen(window.innerWidth > 1024);
+      setOpen(window.innerWidth > 1200);
     };
 
     window.addEventListener("resize", handleResize);
@@ -51,7 +63,7 @@ const Sidebar: React.FC<SidebarProps> = ({ darkMode }) => {
       setOpen(window.innerWidth > 768);
     };
   return (
-    <div className={`${darkMode ? "dark" : "light"}`}>
+    <div className={`${darkMode ? "dark" : "light"}dark:bg-blackD`}>
       <div
         className={`bg-white dark:bg-blackD h-screen ${
           open ? "w-[240px]" : "w-20"
@@ -82,9 +94,11 @@ const Sidebar: React.FC<SidebarProps> = ({ darkMode }) => {
         <div className="flex">
           <ul className="mt-[65px] h-5/6">
             <p className="text-[12px] text-gray-400 px-3">MENU</p>
+       
             {navItems.map((item) => (
+                 <Link to={item.path}>
               <li
-                key={item.id}
+                key={item.title}
                 className={`${listStyle}  ${!open ? "" : "hover:bg-[#E0E0F9]"}`}
               >
                 <div
@@ -94,12 +108,28 @@ const Sidebar: React.FC<SidebarProps> = ({ darkMode }) => {
                 >
                   <item.icon className={iconStyle} />
                 </div>
-                <p className={`${pStyle} ${!open && "scale-0"}`}>{item.name}</p>
+                <p className={`${pStyle} ${!open && "scale-0"}`}>{item.title}</p>
+                {item.submenu && open &&(
+                  <ChevronDownIcon className="" onClick={() => setSubMenuOpen(!submenuOpen)}/>
+                )}
               </li>
+              {item.submenu && submenuOpen && open &&(
+                <ul>
+                  {item.submenuItems?.map((submenuItem, index) => (
+                    <li key={index} className=" hover:bg-[#E0E0F9] group flex ml-10 items-center text-[18px] text-gray-400 font-medium py-2 pr-10 px-2 gap-2  overflow-hidden cursor-pointer  rounded-lg">
+                      <div className="flex flex-row items-center gap-2">
+                       <item.icon className="size-[24px] group-hover:text-primary" />
+                       <p className="group-hover:text-primary ">{submenuItem.title}</p>
+                       </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+           </Link>
             ))}
           </ul>
         </div>
-        <div className="border-t flex px-6 bottom-2 absolute justify-center items-center ">
+        <div className="border-t flex w-full bottom-2 absolute justify-center items-center ">
           <div className=" flex  h-5/6 p-2">
             <ArrowLeftStartOnRectangleIcon className={`${iconStyle}`} />
           </div>

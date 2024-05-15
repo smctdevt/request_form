@@ -18,7 +18,8 @@ module.exports = {
         green: '#5EB562', // green
         white: '#F9F9F9', // Your white color
         graybg: '#EEEEEE', // gray bg
-        blackbg: '#1E1E1E'
+        blackbg: '#1E1E1E',
+        yellow: '#FEA01C',
       },
       fontSize: {
         'title': '32px',

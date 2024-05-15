@@ -5,7 +5,7 @@ import Dashboard from '../components/Dashboard';
 import Login from '../components/Login';
 import Registration from '../components/Registration';
 import ForgotPassword from '../components/ForgotPassword';
-
+import Request from '../components/Request';
 interface RouterProps {
   isdarkMode: boolean;
 }
@@ -20,6 +20,9 @@ const Router: React.FC<RouterProps> = ({isdarkMode}) => {
           <Route path='/forgotpassword' element={<ForgotPassword />} />
           <Route path='/dashboard' element={<App isdarkMode={isdarkMode} />}>
             <Route index element={<Dashboard />} />
+          </Route>
+          <Route path='/request' element={<App isdarkMode={isdarkMode} />}>
+            <Route index element={<Request />} />
           </Route>
         </Routes>
       </BrowserRouter>
