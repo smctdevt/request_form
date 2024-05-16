@@ -4,11 +4,17 @@ import Slice from "./assets/Slice.png";
 import building from "./assets/building.jpg";
 import {useNavigate} from 'react-router-dom'
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
+import {  SubmitHandler, useForm } from "react-hook-form";
+import {z, ZodType} from 'zod';
+import {zodResolver} from '@hookform/resolvers/zod'
 
-interface UserCredentials {
-  email: string;
-  password: string;
-}
+
+type UserCredentials = z.infer<typeof schema>;
+
+const schema = z.object({
+  email: z.string().email(),
+  password: z.string().min(5).max(20),
+});
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -16,27 +22,20 @@ const Login: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
 
 
-  const [credentials, setCredentials] = useState<UserCredentials>({
-    email: "",
-    password: "",
+  const {
+    register, 
+    handleSubmit,
+    formState: { errors, }
+  } = useForm<UserCredentials>({
+    resolver: zodResolver(schema)
   });
 
-  const handleLogin = () => {
-    if (credentials.email === "user@test.com" && credentials.password === "123") {
-      alert("Login successful!");
-      navigate ("/dashboard");
-    } else {
-      alert("Incorrect email or password. Please try again.");
-      
-    }
-  };
+ 
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, field: keyof UserCredentials) => {
-    setCredentials({
-      ...credentials,
-      [field]: e.target.value,
-    });
-  };
+const submitData:SubmitHandler<UserCredentials> =(data) => {
+console.log("it worked", data)
+}
+
   const inputStyle = "w-full lg:max-w-[417px] lg:h-[56px] md:h-10  p-2 bg-gray-300 rounded-lg";
   return (
     <div className="flex flex-row">
@@ -47,16 +46,16 @@ const Login: React.FC = () => {
           <h1 className="text-primary font-bold lg:text-[32px] md:text-2xl  mb-6 text-left lg:mt-0 ">
             ACCOUNT LOGIN
           </h1>
+          <form onSubmit={handleSubmit(submitData)}>
           <div className="mb-4">
             <h1 className="lg:text-lg text-base mb-2">Email</h1>
             <input
-              type="text"
+              type="email"
+              {...register("email")}
               placeholder="Enter Email"
               className={`${inputStyle}`}
-              value={credentials.email}
-              onChange={(e) => handleInputChange(e, "email")}
             />
-        
+          {errors.email && <p className="text-red-500 text-xs"> {errors.email.message}</p>}
           </div>
           <div className="mb-4">
             <h1 className="lg:text-lg text-base mb-2">Password</h1>
@@ -65,12 +64,11 @@ const Login: React.FC = () => {
              type={
                         showPassword ? "text" : "password"
                     }
+              {...register("password")}
               placeholder="Enter password"
               className={`${inputStyle}`}
-              value={credentials.password}
-              onChange={(e) => handleInputChange(e, "password")}
-              
             />
+     
             {showPassword?
               <EyeSlashIcon className="size-[24px] absolute right-3 cursor-pointer " onClick={() => setShowPassword(!showPassword)}  />
              :
@@ -78,24 +76,32 @@ const Login: React.FC = () => {
              <EyeIcon className="size-[24px] absolute right-3 cursor-pointer " onClick={() => setShowPassword(!showPassword)}  />
             }
             </div>
+            {errors.password && <p className="text-red-500 text-xs"> {errors.password.message}</p>}
+            <div className="flex justify-end">
             <Link to="/forgotpassword">
-            <p className="text-right font-medium lg:text-base text-xs mt-[12px] mb-[20px] cursor-pointer">
+             
+            <p className=" font-medium lg:text-base text-xs mt-[12px] mb-[20px] cursor-pointer">
               Forgot Password
             </p>
+         
             </Link>
+            </div>
           </div>
           <button
             className="bg-primary  text-white py-2 px-4 rounded-lg w-full lg:max-w-[417px] lg:h-[56px]  md:h-10 "
-            onClick={handleLogin}
+            type="submit"
           >
             Log In
           </button>
+          </form>
+         
           <Link to="/registration">
-            <div className="flex flex-row justify-center mt-[10px]">
+          <div className="flex flex-row justify-center items-center mt-[10px]">
               <p className="text-center italic lg:text-base text-sm">Don't have an account? </p>
               <p className="pl-2 italic font-bold text-primary underline  lg:text-base text-sm">Sign Up</p>
-            </div>
+              </div>
           </Link>
+         
         </div>
       </div>
       <div className="hidden lg:block w-1/2  items-center justify-center">

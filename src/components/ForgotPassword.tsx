@@ -31,6 +31,9 @@ const ForgotPassword: React.FC = () => {
           </div>
           <div className="px-6 pt-4">
           <button className="bg-primary  text-white py-2 px-4 rounded-lg w-full lg:max-w-[417px] lg:h-[56px]  md:h-10">Send Link</button>
+          <Link to="/login">
+          <button className="bg-gray-300 border-2 border-black mt-2   py-2 px-4 rounded-lg w-full lg:max-w-[417px] lg:h-[56px]  md:h-10 text-black">Cancel</button>
+          </Link>
           <Link to="/registration">
             <div className="flex flex-row justify-center mt-[10px]">
               <p className="text-center italic lg:text-base text-sm">Don't have an account? </p>
