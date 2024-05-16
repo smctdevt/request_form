@@ -80,7 +80,7 @@ console.log("it worked", data)
             <div className="flex justify-end">
             <Link to="/forgotpassword">
              
-            <p className=" font-medium lg:text-base text-xs mt-[12px] mb-[20px] cursor-pointer">
+            <p className=" font-medium lg:text-base text-xs mt-[12px]  cursor-pointer">
               Forgot Password
             </p>
          
@@ -88,7 +88,7 @@ console.log("it worked", data)
             </div>
           </div>
           <button
-            className="bg-primary  text-white py-2 px-4 rounded-lg w-full lg:max-w-[417px] lg:h-[56px]  md:h-10 "
+            className="bg-primary  text-white  px-4 rounded-lg w-full lg:max-w-[417px] lg:h-[56px]  md:h-10 "
             type="submit"
           >
             Log In

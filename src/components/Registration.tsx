@@ -17,7 +17,7 @@ const schema = z.object({
   firstName: z.string().min(2).max(30),
   lastName: z.string().min(2).max(30),
   contact: z.string().min(11),
-  branchCode: z.string().min(5).max(20),
+  branchCode: z.string().nonempty(),
   confirmPassword: z.string().min(5).max(20),
 })
 .refine(
@@ -310,6 +310,7 @@ const Registration : React.FC = () => {
               <div className="relative">
                 
               <Select
+                {...register("branchCode")}
                 options={branchOptions.map(option => ({ value: option, label: option }))}
                
                 placeholder="Select branch"
